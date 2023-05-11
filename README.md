@@ -24,5 +24,3 @@ y restricciones operacionales del sistema teniendo el siguiente alcance:
     • El microservicio debera de disponer de un manejador de excepciones y notificar al microservicio
         ms.logevent y ms.notification enviando el error capturado en formato de texto.
     • En caso de errores en el flujo se debera de enviar el evento a los microservicios ms.logevent y/o ms.notification según estén definidos.
-
-Este documento describe cada uno de los requerimientos que serán implementados en los casos de uso para el desarrollo del sistema.
