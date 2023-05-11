@@ -3,13 +3,13 @@ Los requerimientos incluidos en este documento serán las funcionalidades que el
 HONDA una vez finalizado y entregado.
 Como lo indica la Especificación de Requerimientos de Software determinará las restricciones, políticas de usuario 
 y restricciones operacionales del sistema teniendo el siguiente alcance:
-
-  • El microservicio deberá de siempre estar activo una vez iniciado.
-  • El microservicio tendrá un archivo de propiedades XML con los siguientes datos (smtp, port, smtpsecure, smtpauth, 
+    
+    • El microservicio deberá de siempre estar activo una vez iniciado.
+    • El microservicio tendrá un archivo de propiedades XML con los siguientes datos (smtp, port, smtpsecure, smtpauth, 
     from, username, password, to, subject).
-  • El microservicio para iniciar debera de recibir un mensaje.
-  • El microservicio al momento de recibir un mensaje iniciara el proceso de funcionalidad.
-  • El microservicio generar el body a enviar con el formato “{fecha} {time}, origen: {json.event.source}, 
+    • El microservicio para iniciar debera de recibir un mensaje.
+    • El microservicio al momento de recibir un mensaje iniciara el proceso de funcionalidad.
+    • El microservicio generar el body a enviar con el formato “{fecha} {time}, origen: {json.event.source}, 
     status: {json.event.status}, mensaje: {json.event.msg} y archivo:{json.event.file}”
   • Abrir el servidor de correos Abrir el servidor de correos con la información de conexión: host:{properties.smtp}, 
     port:{properties.port}, smtpsecurre:{properties.smtpsecure}, stmpauth:{properties.smtpauth}, username:{properties.username}, 
