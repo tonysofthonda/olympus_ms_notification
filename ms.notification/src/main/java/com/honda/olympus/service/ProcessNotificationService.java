@@ -16,7 +16,6 @@ public class ProcessNotificationService {
 	EmailService emailService;
 
 	public static final String RESPONSE_MESSAGE = "Notification succsefully sent";
-	public static final String RESPONSE_ERROR_MESSAGE = "Notification failure";
 
 	public ResponseVO processNotification(EventVO notificationDetails) throws NotificationEmailException {
 

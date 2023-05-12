@@ -1,10 +1,21 @@
 package com.honda.olympus.vo;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class EventVO {
 
+	@NotBlank(message = "source is mandatory")
 	private String source;
+	
+	@Size(min = 1,max=3,message = "staus not allowed")
+	@NotNull(message = "status is mandatory")
 	private String status;
+	
+	@NotBlank(message = "msg is mandatory")
 	private String msg;
+	
 	private String file;
 	
 	

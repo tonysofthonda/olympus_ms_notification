@@ -45,6 +45,15 @@ public class EmailService {
 	@Value("${admin.mail.subject}")
 	private String subject;
 	
+	@Value("${admin.mail.subject}")
+	private String serviceName;
+	
+	@Value("${service.exception.message}")
+	private String excptionMessage;
+	
+	@Value("${ervice.exception.message.secondpart}")
+	private String exceptionMessageSecondPart;
+	
 	@Autowired
 	LoggingService loggingService;
 
@@ -76,19 +85,19 @@ public class EmailService {
 			message.setText(body);
 
 			Transport.send(message);
-
+		
 			System.out.println("Email sent succesfully");
 
 		} catch (AddressException e) {
-			event = new EventVO("ms.notification","0","\"No fue posible enviar el email en el servidor \" + {properties.host} + \"con el siguiente body \" + {body}","");
+			event = new EventVO(serviceName,"0",excptionMessage + mailHost + exceptionMessageSecondPart + body,"");
 			loggingService.sendLoggingEvent(event);
 			throw new NotificationEmailException(
-					"\"No fue posible enviar el email en el servidor \" + {properties.host} + \"con el siguiente body \" + {body}");
+					excptionMessage + mailHost + " con el siguiente body: " + body);
 		} catch (MessagingException e) {
-			event = new EventVO("ms.notification","0","\"No fue posible enviar el email en el servidor \" + {properties.host} + \"con el siguiente body \" + {body}","");
+			event = new EventVO(serviceName,"0",excptionMessage + mailHost + exceptionMessageSecondPart + body,"");
 			loggingService.sendLoggingEvent(event);
 			throw new NotificationEmailException(
-					"\"No fue posible enviar el email en el servidor \" + {properties.host} + \"con el siguiente body \" + {body}");
+					excptionMessage + mailHost + exceptionMessageSecondPart + body);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

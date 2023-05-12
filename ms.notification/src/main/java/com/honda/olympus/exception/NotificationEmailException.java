@@ -1,6 +1,6 @@
 package com.honda.olympus.exception;
 
-public class NotificationEmailException extends Exception{
+public class NotificationEmailException extends Exception {
 
 	/**
 	 * 
@@ -10,13 +10,13 @@ public class NotificationEmailException extends Exception{
 	public NotificationEmailException(String message) {
 		super(message);
 	}
-	
+
 	public NotificationEmailException(Throwable ex) {
 		super(ex);
 	}
-	
-	public NotificationEmailException(String message,Throwable ex) {
-		super(message,ex);
+
+	public NotificationEmailException(String message, Throwable ex) {
+		super(message, ex);
 	}
-	
+
 }
