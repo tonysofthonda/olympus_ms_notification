@@ -3,6 +3,7 @@ package com.honda.olympus.controller;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -30,15 +31,18 @@ public class NotificationController {
 		return "Honda Olympus Notification Home V1";
 
 	}
+	
+	@Value("${service.success.message}")
+	private String responseMessage;
 
-	@PostMapping(value = "/olympus/v1/notification", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/event", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ResponseVO> sendNotification(@Valid @RequestBody EventVO notififcationsDetails)
 			throws NotificationEmailException {
 
 		System.out.println(notififcationsDetails.toString());
 		notificationService.processNotification(notififcationsDetails);
 
-		return new ResponseEntity<ResponseVO>(new ResponseVO("Notification sent successsfully", null), HttpStatus.OK);
+		return new ResponseEntity<ResponseVO>(new ResponseVO(responseMessage, null), HttpStatus.OK);
 
 	}
 }

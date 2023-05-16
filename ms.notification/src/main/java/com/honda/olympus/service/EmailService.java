@@ -45,17 +45,19 @@ public class EmailService {
 	@Value("${admin.mail.subject}")
 	private String subject;
 	
-	@Value("${admin.mail.subject}")
+	@Value("${service.name}")
 	private String serviceName;
 	
 	@Value("${service.exception.message}")
 	private String excptionMessage;
 	
-	@Value("${ervice.exception.message.secondpart}")
+	@Value("${service.exception.message.secondpart}")
 	private String exceptionMessageSecondPart;
 	
 	@Autowired
-	LoggingService loggingService;
+	LogEventService loggingService;
+	
+	private static final String SUCCESS_MESSAGE = "Success";
 
 	public void sendEmail(String body) throws NotificationEmailException {
         EventVO event = null;
@@ -87,17 +89,17 @@ public class EmailService {
 			Transport.send(message);
 		
 			System.out.println("Email sent succesfully");
+			
+			event = new EventVO(serviceName,"1",SUCCESS_MESSAGE,"");
+			loggingService.sendLogEvent(event);
+			throw new NotificationEmailException(
+					excptionMessage +" "+  mailHost +" "+ exceptionMessageSecondPart + body);
 
-		} catch (AddressException e) {
-			event = new EventVO(serviceName,"0",excptionMessage + mailHost + exceptionMessageSecondPart + body,"");
-			loggingService.sendLoggingEvent(event);
-			throw new NotificationEmailException(
-					excptionMessage + mailHost + " con el siguiente body: " + body);
 		} catch (MessagingException e) {
-			event = new EventVO(serviceName,"0",excptionMessage + mailHost + exceptionMessageSecondPart + body,"");
-			loggingService.sendLoggingEvent(event);
+			event = new EventVO(serviceName,"0",excptionMessage +" "+ mailHost +" "+ exceptionMessageSecondPart + body,"");
+			loggingService.sendLogEvent(event);
 			throw new NotificationEmailException(
-					excptionMessage + mailHost + exceptionMessageSecondPart + body);
+					excptionMessage +" "+  mailHost +" "+ exceptionMessageSecondPart + body);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

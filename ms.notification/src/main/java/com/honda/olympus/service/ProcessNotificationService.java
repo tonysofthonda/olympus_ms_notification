@@ -3,6 +3,7 @@ package com.honda.olympus.service;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.honda.olympus.exception.NotificationEmailException;
@@ -15,7 +16,8 @@ public class ProcessNotificationService {
 	@Autowired
 	EmailService emailService;
 
-	public static final String RESPONSE_MESSAGE = "Notification succsefully sent";
+	@Value("${service.success.message}")
+	private String responseMessage;
 
 	public ResponseVO processNotification(EventVO notificationDetails) throws NotificationEmailException {
 
@@ -39,7 +41,7 @@ public class ProcessNotificationService {
 
 			emailService.sendEmail(notificationBody.toString());
 
-			return new ResponseVO(RESPONSE_MESSAGE,null);
+			return new ResponseVO(responseMessage,null);
 
 	}
 
