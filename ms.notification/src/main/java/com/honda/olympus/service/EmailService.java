@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import com.honda.olympus.exception.NotificationEmailException;
 import com.honda.olympus.vo.EventVO;
+import com.honda.olympus.vo.LogEventVO;
 
 @Service
 public class EmailService {
@@ -57,10 +58,10 @@ public class EmailService {
 	@Autowired
 	LogEventService loggingService;
 	
-	private static final String SUCCESS_MESSAGE = "Success";
+	private static final String SUCCESS_MESSAGE = "SUCCESS";
 
-	public void sendEmail(String body) throws NotificationEmailException {
-        EventVO event = null;
+	public void sendEmail(String body,String fileName) throws NotificationEmailException {
+		LogEventVO event = null;
 		
 		try {
 
@@ -90,13 +91,11 @@ public class EmailService {
 		
 			System.out.println("Email sent succesfully");
 			
-			event = new EventVO(serviceName,"1",SUCCESS_MESSAGE,"");
+			event = new LogEventVO(serviceName,1L,SUCCESS_MESSAGE,fileName);
 			loggingService.sendLogEvent(event);
-			throw new NotificationEmailException(
-					excptionMessage +" "+  mailHost +" "+ exceptionMessageSecondPart + body);
 
 		} catch (MessagingException e) {
-			event = new EventVO(serviceName,"0",excptionMessage +" "+ mailHost +" "+ exceptionMessageSecondPart + body,"");
+			event = new LogEventVO(serviceName,0L,excptionMessage +" "+ mailHost +" "+ exceptionMessageSecondPart + body,fileName);
 			loggingService.sendLogEvent(event);
 			throw new NotificationEmailException(
 					excptionMessage +" "+  mailHost +" "+ exceptionMessageSecondPart + body);

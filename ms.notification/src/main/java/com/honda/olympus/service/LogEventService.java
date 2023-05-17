@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.honda.olympus.vo.EventVO;
+import com.honda.olympus.vo.LogEventVO;
 
 
 @Service
@@ -16,7 +16,7 @@ public class LogEventService {
 	@Value("${logEvent.service.url}")
 	private String notificationURI;
 
-	public void sendLogEvent(EventVO message) {
+	public void sendLogEvent(LogEventVO message) {
 		
 		try {
 			
@@ -27,9 +27,9 @@ public class LogEventService {
 			headers.setContentType(MediaType.APPLICATION_JSON);
 			RestTemplate restTemplate = new RestTemplate();
 			
-			HttpEntity<EventVO> requestEntity = new HttpEntity<>(message, headers);
+			HttpEntity<LogEventVO> requestEntity = new HttpEntity<>(message, headers);
 
-			ResponseEntity<EventVO> responseEntity = restTemplate.postForEntity(notificationURI, requestEntity, EventVO.class);
+			ResponseEntity<LogEventVO> responseEntity = restTemplate.postForEntity(notificationURI, requestEntity, LogEventVO.class);
 
 			System.out.println("Status Code: " + responseEntity.getStatusCode());		
 			System.out.println("Message: " + responseEntity.getBody().getMsg());

@@ -39,7 +39,7 @@ public class ProcessNotificationService {
 			notificationBody.append(", Archivo: ");
 			notificationBody.append(notificationDetails.getFile());
 
-			emailService.sendEmail(notificationBody.toString());
+			emailService.sendEmail(notificationBody.toString(),notificationDetails.getFile());
 
 			return new ResponseVO(responseMessage,null);
 
