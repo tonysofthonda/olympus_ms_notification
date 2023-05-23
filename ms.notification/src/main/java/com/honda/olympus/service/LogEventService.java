@@ -29,10 +29,10 @@ public class LogEventService {
 			
 			HttpEntity<LogEventVO> requestEntity = new HttpEntity<>(message, headers);
 
-			ResponseEntity<LogEventVO> responseEntity = restTemplate.postForEntity(notificationURI, requestEntity, LogEventVO.class);
+			ResponseEntity<String> responseEntity = restTemplate.postForEntity(notificationURI, requestEntity, String.class);
 
 			System.out.println("Status Code: " + responseEntity.getStatusCode());		
-			System.out.println("Message: " + responseEntity.getBody().getMsg());
+			System.out.println("Message: " + responseEntity.getBody());
 			
 		} catch (Exception e) {
 			System.out.println(e.getLocalizedMessage());
