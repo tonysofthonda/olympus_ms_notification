@@ -58,7 +58,8 @@ public class EmailService {
 	@Autowired
 	LogEventService loggingService;
 	
-	private static final String SUCCESS_MESSAGE = "SUCCESS";
+	@Value("${service.success.message}")
+	private String successMesage;
 
 	public void sendEmail(String body,String fileName) throws NotificationEmailException {
 		LogEventVO event = null;
@@ -91,7 +92,7 @@ public class EmailService {
 		
 			System.out.println("Email sent succesfully");
 			
-			event = new LogEventVO(serviceName,1L,SUCCESS_MESSAGE,fileName);
+			event = new LogEventVO(serviceName,1L,successMesage,fileName);
 			loggingService.sendLogEvent(event);
 
 		} catch (MessagingException e) {

@@ -24,6 +24,9 @@ public class NotificationController {
 
 	@Autowired
 	ProcessNotificationService notificationService;
+	
+	@Value("${service.name}")
+	private String serviceName;
 
 	@RequestMapping("/")
 	public String homeController() {
@@ -42,7 +45,7 @@ public class NotificationController {
 		System.out.println(notififcationsDetails.toString());
 		notificationService.processNotification(notififcationsDetails);
 
-		return new ResponseEntity<ResponseVO>(new ResponseVO(responseMessage, null), HttpStatus.OK);
+		return new ResponseEntity<ResponseVO>(new ResponseVO(notififcationsDetails.getSource(),1L,responseMessage, ""), HttpStatus.OK);
 
 	}
 }

@@ -18,7 +18,7 @@ public class ProcessNotificationService {
 
 	@Value("${service.success.message}")
 	private String responseMessage;
-
+	
 	public ResponseVO processNotification(EventVO notificationDetails) throws NotificationEmailException {
 
 			final Date currentDate = new Date();
@@ -41,7 +41,7 @@ public class ProcessNotificationService {
 
 			emailService.sendEmail(notificationBody.toString(),notificationDetails.getFile());
 
-			return new ResponseVO(responseMessage,null);
+			return new ResponseVO(notificationDetails.getSource(),1L,responseMessage,"");
 
 	}
 
