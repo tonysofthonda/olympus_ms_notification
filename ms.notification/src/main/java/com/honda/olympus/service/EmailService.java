@@ -1,13 +1,11 @@
 package com.honda.olympus.service;
 
 import java.util.Properties;
-
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
-import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
@@ -16,9 +14,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.honda.olympus.exception.NotificationEmailException;
-import com.honda.olympus.vo.EventVO;
 import com.honda.olympus.vo.LogEventVO;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class EmailService {
 
@@ -75,7 +75,7 @@ public class EmailService {
 			props.put("mail.smtp.password", mailPassword);
 			props.put("mail.debug", true);
 
-			Session session = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
+			Session session = Session.getInstance(props, new javax.mail.Authenticator() {
 				@Override
 				protected PasswordAuthentication getPasswordAuthentication() {
 					return new PasswordAuthentication(userName, mailPassword);
@@ -90,7 +90,7 @@ public class EmailService {
 
 			Transport.send(message);
 		
-			System.out.println("Email sent succesfully");
+			log.info("Email SENT succesfully");
 			
 			event = new LogEventVO(serviceName,1L,successMesage,fileName);
 			loggingService.sendLogEvent(event);

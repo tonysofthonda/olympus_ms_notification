@@ -18,6 +18,9 @@ import com.honda.olympus.service.ProcessNotificationService;
 import com.honda.olympus.vo.EventVO;
 import com.honda.olympus.vo.ResponseVO;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @Validated
 public class NotificationController {
@@ -42,7 +45,7 @@ public class NotificationController {
 	public ResponseEntity<ResponseVO> sendNotification(@Valid @RequestBody EventVO notififcationsDetails)
 			throws NotificationEmailException {
 
-		System.out.println(notififcationsDetails.toString());
+		log.info("Event: {}",notififcationsDetails.toString());
 		notificationService.processNotification(notififcationsDetails);
 
 		return new ResponseEntity<ResponseVO>(new ResponseVO(notififcationsDetails.getSource(),1L,responseMessage, ""), HttpStatus.OK);
