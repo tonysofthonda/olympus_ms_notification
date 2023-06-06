@@ -10,6 +10,9 @@ import com.honda.olympus.exception.NotificationEmailException;
 import com.honda.olympus.vo.EventVO;
 import com.honda.olympus.vo.ResponseVO;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class ProcessNotificationService {
 
@@ -39,7 +42,10 @@ public class ProcessNotificationService {
 			notificationBody.append(", Archivo: ");
 			notificationBody.append(notificationDetails.getFile());
 
-			emailService.sendEmail(notificationBody.toString(),notificationDetails.getFile());
+			String subjectDetail = notificationDetails.getSource()+"-Status: "+notificationDetails.getStatus();
+			log.debug("Subject: {}",subjectDetail);
+			
+			emailService.sendEmail(notificationBody.toString(),notificationDetails.getFile(),subjectDetail);
 
 			return new ResponseVO(notificationDetails.getSource(),1L,responseMessage,"");
 

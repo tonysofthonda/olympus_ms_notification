@@ -22,8 +22,8 @@ public class LogEventService {
 		
 		try {
 			
-			log.info("Creting logEvent...");
-			log.info(message.toString());
+			log.debug("Creting logEvent...");
+			log.debug("MEssage: {}",message.toString());
 			
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON);
@@ -33,15 +33,12 @@ public class LogEventService {
 
 			ResponseEntity<String> responseEntity = restTemplate.postForEntity(notificationURI, requestEntity, String.class);
 
-			log.info("Status Code: {}",responseEntity.getStatusCode());		
-			log.info("Message: {}",responseEntity.getBody());
+			log.debug("Status Code: {}",responseEntity.getStatusCode());		
+			log.debug("Message: {}",responseEntity.getBody());
 			
 		} catch (Exception e) {
-			log.info(e.getLocalizedMessage());
+			log.info("Notification error calling logEvent service due to: {}",e.getMessage());	
 		}
-		
-		
-		
 		
 	}
 	

@@ -61,7 +61,7 @@ public class EmailService {
 	@Value("${service.success.message}")
 	private String successMesage;
 
-	public void sendEmail(String body,String fileName) throws NotificationEmailException {
+	public void sendEmail(String body,String fileName,String source) throws NotificationEmailException {
 		LogEventVO event = null;
 		
 		try {
@@ -85,23 +85,24 @@ public class EmailService {
 			Message message = new MimeMessage(session);
 			message.setFrom(new InternetAddress(userName));
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(mailTo));
-			message.setSubject(subject);
+			message.setSubject(subject+"("+source+")");
 			message.setText(body);
 
 			Transport.send(message);
 		
-			log.info("Email SENT succesfully");
+			log.info("Notification:: Email SENT succesfully");
 			
 			event = new LogEventVO(serviceName,1L,successMesage,fileName);
 			loggingService.sendLogEvent(event);
 
 		} catch (MessagingException e) {
+			
 			event = new LogEventVO(serviceName,0L,excptionMessage +" "+ mailHost +" "+ exceptionMessageSecondPart + body,fileName);
 			loggingService.sendLogEvent(event);
 			throw new NotificationEmailException(
 					excptionMessage +" "+  mailHost +" "+ exceptionMessageSecondPart + body);
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.debug("Exception caused by: {}",e.getLocalizedMessage());
 		}
 	}
 

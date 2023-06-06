@@ -1,5 +1,4 @@
 package com.honda.olympus.controller;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,10 +44,10 @@ public class NotificationController {
 	public ResponseEntity<ResponseVO> sendNotification(@Valid @RequestBody EventVO notififcationsDetails)
 			throws NotificationEmailException {
 
-		log.info("Event: {}",notififcationsDetails.toString());
+		log.debug("Event: {}",notififcationsDetails.toString());
 		notificationService.processNotification(notififcationsDetails);
 
-		return new ResponseEntity<ResponseVO>(new ResponseVO(notififcationsDetails.getSource(),1L,responseMessage, ""), HttpStatus.OK);
+		return new ResponseEntity<>(new ResponseVO(notififcationsDetails.getSource(),1L,responseMessage, ""), HttpStatus.OK);
 
 	}
 }
