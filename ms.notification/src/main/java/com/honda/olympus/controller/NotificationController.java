@@ -17,6 +17,7 @@ import com.honda.olympus.service.ProcessNotificationService;
 import com.honda.olympus.vo.EventVO;
 import com.honda.olympus.vo.ResponseVO;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -29,17 +30,11 @@ public class NotificationController {
 	
 	@Value("${service.name}")
 	private String serviceName;
-
-	@RequestMapping("/")
-	public String homeController() {
-
-		return "Honda Olympus Notification Home V1";
-
-	}
 	
 	@Value("${service.success.message}")
 	private String responseMessage;
 
+	@Operation(summary = "Send a notification")
 	@PostMapping(value = "/event", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ResponseVO> sendNotification(@Valid @RequestBody EventVO notififcationsDetails)
 			throws NotificationEmailException {
