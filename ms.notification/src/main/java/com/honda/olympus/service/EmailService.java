@@ -1,22 +1,19 @@
 package com.honda.olympus.service;
 
-import java.util.Properties;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-
+import com.honda.olympus.exception.NotificationEmailException;
+import com.honda.olympus.vo.LogEventVO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.honda.olympus.exception.NotificationEmailException;
-import com.honda.olympus.vo.LogEventVO;
-
-import lombok.extern.slf4j.Slf4j;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import java.util.Properties;
 
 @Slf4j
 @Service
@@ -27,18 +24,6 @@ public class EmailService {
 
 	@Value("${spring.mail.port}")
 	private String mailPort;
-
-	@Value("${spring.mail.username}")
-	private String userName;
-
-	@Value("${spring.mail.password}")
-	private String mailPassword;
-
-	@Value("${spring.mail.properties.mail.smtp.auth}")
-	private String auth;
-
-	@Value("${spring.mail.properties.mail.smtp.starttls.enable}")
-	private String strattls;
 
 	@Value("${admin.mail.mailTo}")
 	private String mailTo;
@@ -71,19 +56,12 @@ public class EmailService {
 			props.put("mail.smtp.starttls.enable", true);
 			props.put("mail.smtp.host", mailHost);
 			props.put("mail.smtp.port", mailPort);
-			props.put("mail.smtp.user", userName);
-			props.put("mail.smtp.password", mailPassword);
 			props.put("mail.debug", true);
 
-			Session session = Session.getInstance(props, new javax.mail.Authenticator() {
-				@Override
-				protected PasswordAuthentication getPasswordAuthentication() {
-					return new PasswordAuthentication(userName, mailPassword);
-				}
-			});
+			// TODO: Revisar implementación JBOSS, porque se removieron propiedades para crear la sesión
+			Session session = Session.getDefaultInstance(props);
 
 			Message message = new MimeMessage(session);
-			message.setFrom(new InternetAddress(userName));
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(mailTo));
 			message.setSubject(subject+"("+source+")");
 			message.setText(body);
