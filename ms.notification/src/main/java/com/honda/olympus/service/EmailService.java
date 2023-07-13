@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -19,69 +20,63 @@ import java.util.Properties;
 @Service
 public class EmailService {
 
-	@Value("${spring.mail.host}")
-	private String mailHost;
+    @Value("${spring.mail.host}")
+    private String mailHost;
 
-	@Value("${spring.mail.port}")
-	private String mailPort;
+    @Value("${spring.mail.port}")
+    private String mailPort;
 
-	@Value("${admin.mail.mailTo}")
-	private String mailTo;
+    @Value("${admin.mail.mailTo}")
+    private String mailTo;
 
-	@Value("${admin.mail.subject}")
-	private String subject;
-	
-	@Value("${service.name}")
-	private String serviceName;
-	
-	@Value("${service.exception.message}")
-	private String excptionMessage;
-	
-	@Value("${service.exception.message.secondpart}")
-	private String exceptionMessageSecondPart;
-	
-	@Autowired
-	LogEventService loggingService;
-	
-	@Value("${service.success.message}")
-	private String successMesage;
+    @Value("${admin.mail.subject}")
+    private String subject;
 
-	public void sendEmail(String body,String fileName,String source) throws NotificationEmailException {
-		LogEventVO event = null;
-		
-		try {
+    @Value("${service.name}")
+    private String serviceName;
 
-			Properties props = new Properties();
-			props.put("mail.smtp.auth", true);
-			props.put("mail.smtp.starttls.enable", true);
-			props.put("mail.smtp.host", mailHost);
-			props.put("mail.smtp.port", mailPort);
-			props.put("mail.debug", true);
+    @Value("${service.exception.message}")
+    private String excptionMessage;
 
-			// TODO: Revisar implementación JBOSS, porque se removieron propiedades para crear la sesión
-			Session session = Session.getDefaultInstance(props);
+    @Value("${service.exception.message.secondpart}")
+    private String exceptionMessageSecondPart;
 
-			Message message = new MimeMessage(session);
-			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(mailTo));
-			message.setSubject(subject+"("+source+")");
-			message.setText(body);
+    @Autowired
+    LogEventService loggingService;
 
-			Transport.send(message);
-		
-			log.info("Notification:: Email SENT succesfully");
-			
-			event = new LogEventVO(serviceName,1L,successMesage,fileName);
-			loggingService.sendLogEvent(event);
+    @Value("${service.success.message}")
+    private String successMesage;
 
-		} catch (MessagingException e) {
-			
-			event = new LogEventVO(serviceName,0L,excptionMessage +" "+ mailHost +" "+ exceptionMessageSecondPart + body,fileName);
-			loggingService.sendLogEvent(event);
-			throw new NotificationEmailException(
-					excptionMessage +" "+  mailHost +" "+ exceptionMessageSecondPart + body);
-		} catch (Exception e) {
-			log.debug("Exception caused by: {}",e.getLocalizedMessage());
-		}
-	}
+    // TODO: Reemplazar por el JNDI que Honda proporcione
+    @Resource(mappedName = "java:jboss/mail/honda")
+    private Session mailSession;
+
+    public void sendEmail(String body, String fileName, String source) throws NotificationEmailException {
+        LogEventVO event = null;
+
+        try {
+
+            Message message = new MimeMessage(mailSession);
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(mailTo));
+            message.setSubject(subject + "(" + source + ")");
+            message.setText(body);
+
+            Transport.send(message);
+
+            log.info("Notification:: Email SENT succesfully");
+
+            event = new LogEventVO(serviceName, 1L, successMesage, fileName);
+            loggingService.sendLogEvent(event);
+
+        } catch (MessagingException e) {
+
+            event = new LogEventVO(serviceName, 0L, excptionMessage + " " + mailHost + " " + exceptionMessageSecondPart + body, fileName);
+            loggingService.sendLogEvent(event);
+            throw new NotificationEmailException(
+                    excptionMessage + " " + mailHost + " " + exceptionMessageSecondPart + body);
+        } catch (Exception e) {
+            log.debug("Exception caused by: {}", e.getLocalizedMessage());
+        }
+    }
 
 }
