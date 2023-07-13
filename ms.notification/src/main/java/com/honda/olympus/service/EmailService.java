@@ -47,7 +47,6 @@ public class EmailService {
     @Value("${service.success.message}")
     private String successMesage;
 
-    // TODO: Reemplazar por el JNDI que Honda proporcione
     @Resource(mappedName = "java:jboss/mail/honda")
     private Session mailSession;
 
